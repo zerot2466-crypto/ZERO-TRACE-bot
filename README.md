@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/logo.jpg" alt="ZERO TRACE BOT" width="250" height="250" style="border-radius: 50%;">
+</p>
+
 # 🤖 ZERO TRACE BOT v5.0
 
 Bot WhatsApp ultra-complet — 58 commandes, système XP, protections avancées.
