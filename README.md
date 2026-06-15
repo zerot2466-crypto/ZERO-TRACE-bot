@@ -143,3 +143,36 @@ Les contributions sont les bienvenues ! Si vous avez des idées d'amélioration,
 <p align="center">
   Développé avec ❤️ par <a href="https://github.com/zerot2466-crypto">zerot2466-crypto</a>
 </p>
+
+---
+
+## 🔑 Guide des Clés API
+
+Pour utiliser toutes les fonctions du bot, vous devez obtenir vos propres clés API et les insérer dans le fichier `keys.js`.
+
+### 1. Intelligence Artificielle (IA)
+| Service | Où l'obtenir | Utilité |
+|---|---|---|
+| **OpenRouter** | [openrouter.ai](https://openrouter.ai/keys) | Accès à GPT-4, Claude, etc. |
+| **Groq** | [console.groq.com](https://console.groq.com/keys) | Réponses IA ultra-rapides |
+| **Cerebras** | [cloud.cerebras.ai](https://cloud.cerebras.ai/) | Alternative IA performante |
+
+### 2. Médias & Outils
+| Service | Où l'obtenir | Utilité |
+|---|---|---|
+| **Remove.bg** | [remove.bg](https://www.remove.bg/api) | Suppression automatique du fond des images |
+| **ElevenLabs** | [elevenlabs.io](https://elevenlabs.io/api) | Voix IA réalistes (TTS) |
+| **GNews** | [gnews.io](https://gnews.io/) | Actualités en temps réel |
+
+### 3. Sécurité & OSINT
+| Service | Où l'obtenir | Utilité |
+|---|---|---|
+| **VirusTotal** | [virustotal.com](https://www.virustotal.com/gui/my-apikey) | Analyse de fichiers/liens suspects |
+| **UrlScan** | [urlscan.io](https://urlscan.io/user/signup) | Analyse de sécurité des sites web |
+
+### 📝 Comment les insérer ?
+1. Ouvrez le fichier `keys.js` à la racine du projet.
+2. Remplacez les textes comme `VOTRE_CLE_OPENROUTER` par votre vraie clé entre les guillemets.
+3. Enregistrez le fichier et relancez le bot avec `npm start`.
+
+---
