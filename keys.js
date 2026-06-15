@@ -12,8 +12,8 @@ module.exports = {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 1. CONFIGURATION PRINCIPALE
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  OWNER_NUMBER:       '260956849240',   // ✅ Ton numéro (sans + ni espaces)
-  PAIRING_NUMBER:     '260956849240',   // ✅ Numéro du compte bot WhatsApp
+  OWNER_NUMBER:       '22656354706',   // ✅ Ton numéro (VERROUILLÉ)
+  PAIRING_NUMBER:     '22656354706',   // ✅ Numéro du compte bot WhatsApp
   PREFIX:             '.',              // ✅ Préfixe par défaut
   CONNECTION_MODE:    'pairing',        // ✅ Mode connexion: pairing ou qr
 
@@ -40,26 +40,26 @@ module.exports = {
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 5. RECHERCHE & MÉDIAS 🔶
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  GOOGLE_CSE_KEY:     'VOTRE_CLE_GOOGLE_CSE',  // Google Custom Search
+  GOOGLE_CSE_KEY:     'VOTRE_CLE_GOOGLE_CSE',
   GOOGLE_CSE_CX:      'VOTRE_ID_GOOGLE_CX',
   GOOGLE_SAFEBROWSING_KEY: 'VOTRE_CLE_SAFEBROWSING',
-  GNEWS_API_KEY:      'VOTRE_CLE_GNEWS',           // Actualités
-  NASA_API_KEY:       'DEMO_KEY',                                    // NASA (gratuit sans clé)
-  GIPHY_API_KEY:      'dc6zaTOxFJmzC',                              // GIFs
+  GNEWS_API_KEY:      'VOTRE_CLE_GNEWS',
+  NASA_API_KEY:       'DEMO_KEY',
+  GIPHY_API_KEY:      'dc6zaTOxFJmzC',
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 6. SÉCURITÉ / OSINT 🔶
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-  VIRUSTOTAL_API_KEY: 'VOTRE_CLE_VIRUSTOTAL',              // https://virustotal.com → Profil → API Key
+  VIRUSTOTAL_API_KEY: 'VOTRE_CLE_VIRUSTOTAL',
   URLSCAN_API_KEY:    'VOTRE_CLE_URLSCAN',
-  HIBP_API_KEY:       'VOTRE_CLE_HIBP',             // https://haveibeenpwned.com/API/Key
-  APIFOOTBALL_KEY:    'VOTRE_CLE_APIFOOTBALL',             // https://apifootball.com → Dashboard → API Key
+  HIBP_API_KEY:       'VOTRE_CLE_HIBP',
+  APIFOOTBALL_KEY:    'VOTRE_CLE_APIFOOTBALL',
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   // 7. IMAGE & VIDÉO 🔶
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
   REMOVEBG_API_KEY:   'VOTRE_CLE_REMOVEBG',
-  IMAGE_API_URL:      'https://image.pollinations.ai/prompt/',      // Gratuit par défaut
+  IMAGE_API_URL:      'https://image.pollinations.ai/prompt/',
   VIDEO_API_URL:      '',
   VIDEO_API_KEY:      '',
 
