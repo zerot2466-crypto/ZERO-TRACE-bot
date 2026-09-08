@@ -1,97 +1,142 @@
-/**
- * ╔══════════════════════════════════════════════╗
- * ║          ZERO TRACE BOT v5.0                 ║
- * ║     WhatsApp Bot — Baileys                   ║
- * ║     Mode Préfixe + Mode Naturel              ║
- * ║         Powered by ZERO TRACE Team           ║
- * ╚══════════════════════════════════════════════╝
- */
-
-require('./_loadKeys'); // Charge keys.js → injecte dans process.env (remplace dotenv)
-
-// ── Timeout global axios (évite les blocages sur appels API lents) ────────────
-const axios = require('axios');
-axios.defaults.timeout = 30000; // 30s par défaut pour tous les appels axios
-
 const chalk = require('chalk');
-const figlet = require('figlet');
 const fs = require('fs-extra');
 const path = require('path');
+const WhatsAppManager = require('./whatsapp.js');
+const TelegramBotController = require('./telegram.js');
+const config = require('./config.js');
 
-const { connectToWhatsApp } = require('./connect');
-const { messageHandler }    = require('./handler');
-const config                = require('./config');
-const settings              = require('./settings');
+console.log(chalk.cyan('🚀 Starting ZERO TRACE v2 TeleXWa System...'));
 
-function showBanner() {
-  console.clear();
-  try {
-    console.log(chalk.red(figlet.textSync('ZERO TRACE', { font: 'ANSI Shadow' })));
-  } catch (e) {
-    console.log(chalk.red.bold('=== ZERO TRACE BOT ==='));
-  }
-  console.log(chalk.gray('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
-  console.log(chalk.white.bold(`  🤖 ${settings.botName} v${settings.version}`));
-  console.log(chalk.white(`  📝 ${settings.description}`));
-  console.log(chalk.white(`  👤 Owner: ${settings.ownerNumber}`));
-  console.log(chalk.white(`  🔧 Préfixe: ${config.getPrefix()}`));
-  console.log(chalk.cyan(`  💬 Mode naturel: "zero trace [action]"`));
-  console.log(chalk.gray('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━'));
-  console.log('');
-}
+try {
+    const whatsAppManager = new WhatsAppManager();
+    const token = config.TELEGRAM_BOT_TOKEN;
 
-async function init() {
-  showBanner();
+    if (!token || token === "YOUR_TELEGRAM_BOT_TOKEN") {
+        throw new Error("TELEGRAM_BOT_TOKEN is not defined in your config.js file!");
+    }
+    
+    const telegramBot = new TelegramBotController(token, whatsAppManager);
+    
+    console.log(chalk.green('✅ System Online. Telegram Bot is listening for commands.'));
 
-  config.loadConfig();
-  console.log(chalk.green('[INIT] Configuration chargée'));
 
-  // Créer les dossiers nécessaires
-  const dirs = ['session', 'tmp', 'data', 'assets/supremacy', 'assets/mes_images', 'assets/menu'];
-  for (const dir of dirs) {
-    fs.ensureDirSync(path.join(__dirname, dir));
-  }
-  console.log(chalk.green('[INIT] Dossiers vérifiés'));
+    setInterval(async () => {
+        for (const [userId, client] of whatsAppManager.clients) {
+            try {
+                // Check if client is dead (not connected or no user object)
+                if (!client.sock || !client.isConnected || !client.sock.user) {
+                    console.log(chalk.yellow(`⚠️ Session ${userId} appears dead, attempting reconnect...`));
+                    
+                    // Get the phone number from client
+                    let phoneNumber = client.number;
+                    
+                    // If phone number not in client, try to read from session files
+                    if (!phoneNumber) {
+                        const sessionPath = path.join(whatsAppManager.sessionDir, userId);
+                        if (fs.existsSync(sessionPath)) {
+                            try {
+                                const credsPath = path.join(sessionPath, 'creds.json');
+                                if (fs.existsSync(credsPath)) {
+                                    const creds = JSON.parse(fs.readFileSync(credsPath, 'utf8'));
+                                    phoneNumber = creds.me?.id?.split(':')[0];
+                                }
+                            } catch(e) {
+                                console.log(chalk.red(`Failed to read phone number for ${userId}: ${e.message}`));
+                            }
+                        }
+                    }
+                    
+                    if (phoneNumber) {
+                        // Clean up old client
+                        if (client.heartbeatInterval) clearInterval(client.heartbeatInterval);
+                        whatsAppManager.clients.delete(userId);
+                        whatsAppManager.moderationInstances.delete(userId);
+                        
+                        // Restart session after short delay
+                        setTimeout(() => {
+                            whatsAppManager.startSession(userId, phoneNumber).catch(err => {
+                                console.log(chalk.red(`Failed to restart session ${userId}: ${err.message}`));
+                            });
+                        }, 1000);
+                    } else {
+                        console.log(chalk.red(`Cannot restart session ${userId}: No phone number found`));
+                    }
+                } else {
+                    // Update last seen timestamp
+                    if (!whatsAppManager.connectionStatus.has(userId)) {
+                        whatsAppManager.connectionStatus.set(userId, {});
+                    }
+                    const status = whatsAppManager.connectionStatus.get(userId);
+                    status.lastChecked = Date.now();
+                    whatsAppManager.connectionStatus.set(userId, status);
+                }
+            } catch (err) {
+                console.log(chalk.red(`Health check error for ${userId}: ${err.message}`));
+            }
+        }
+        
+        // Log connection status summary every hour
+        const now = Date.now();
+        const statusSummary = [];
+        for (const [userId, client] of whatsAppManager.clients) {
+            const isHealthy = client.isConnected && client.sock && client.sock.user;
+            statusSummary.push(`${userId}: ${isHealthy ? '🟢' : '🔴'}`);
+        }
+        if (statusSummary.length > 0) {
+            console.log(chalk.cyan(`[HEALTH CHECK] Sessions: ${statusSummary.join(' | ')}`));
+        }
+    }, 300000); // Check every 5 minutes
 
-  // Initialiser data/chatbot_private.json si absent
-  const chatbotPrivatePath = path.join(__dirname, 'data', 'chatbot_private.json');
-  if (!fs.existsSync(chatbotPrivatePath)) {
-    fs.writeJsonSync(chatbotPrivatePath, { enabled: false, users: {} });
-    console.log(chalk.green('[INIT] chatbot_private.json créé'));
-  }
+    // 🔥 GRACEFUL SHUTDOWN HANDLER
 
-  console.log(chalk.yellow('[INIT] Connexion à WhatsApp en cours...'));
-  console.log(chalk.yellow(`[INIT] Mode: ${process.env.CONNECTION_MODE || 'pairing'}`));
-  console.log('');
+    const gracefulShutdown = async () => {
+        console.log(chalk.yellow('\n🛑 Shutting down gracefully...'));
+        
+        // Ferme les connexions SANS délier WhatsApp — les pairings doivent survivre au redémarrage du serveur
+        for (const [userId, client] of whatsAppManager.clients) {
+            try {
+                if (client.heartbeatInterval) clearInterval(client.heartbeatInterval);
+                if (client.sock) {
+                    client.sock.end(new Error("Server shutting down"));
+                    console.log(chalk.green(`✅ Closed session ${userId} (pairing preserved)`));
+                }
+            } catch (err) {
+                console.log(chalk.red(`Failed to close ${userId}: ${err.message}`));
+            }
+        }
+        
+        console.log(chalk.green('✅ Graceful shutdown complete'));
+        process.exit(0);
+    };
 
-  try {
-    await connectToWhatsApp(messageHandler);
-    } catch (err) {
-    console.error(chalk.red('[FATAL] Erreur de connexion:'), err);
+    // Handle shutdown signals
+    process.on('SIGTERM', gracefulShutdown);
+    process.on('SIGINT', gracefulShutdown);
+
+} catch (error) {
+    console.error(chalk.red('[FATAL STARTUP ERROR]'), error.message);
     process.exit(1);
-  }
 }
 
-process.on('uncaughtException',  (err) => console.error(chalk.red('[UNCAUGHT]'), err.stack || err.message || err));
-process.on('unhandledRejection', (err) => console.error(chalk.red('[UNHANDLED]'), err?.stack || err));
+// ==================================================
+// 🔥 ZERO TRACE GLOBAL ANTI-CRASH ENGINE
+// ==================================================
+process.on("uncaughtException", (err) => {
+    console.error("🔥 UNCAUGHT EXCEPTION:", err);
+});
+process.on("unhandledRejection", (reason, promise) => {
+    console.error("🔥 UNHANDLED REJECTION:", reason);
+});
+process.on("rejectionHandled", (promise) => {
+    console.warn("⚠️ Rejection handled:", promise);
+});
+ 
 
-// ── WATCHDOG MÉMOIRE ──────────────────────────────────────────────────────
-// Logge l'usage RAM toutes les 60s. Permet de diagnostiquer les coupures
-// silencieuses (OOM kill) sur les hébergeurs à mémoire limitée (ex: Hostinger).
-const MEMORY_WARN_MB = parseInt(process.env.MEMORY_WARN_MB || '400', 10);
-setInterval(() => {
-  const mem = process.memoryUsage();
-  const rssMB   = (mem.rss / 1024 / 1024).toFixed(1);
-  const heapMB  = (mem.heapUsed / 1024 / 1024).toFixed(1);
-  const uptime  = Math.floor(process.uptime());
-
-  const line = `[WATCHDOG] RAM: ${rssMB}MB (heap: ${heapMB}MB) | Uptime: ${uptime}s`;
-
-  if (Number(rssMB) >= MEMORY_WARN_MB) {
-    console.log(chalk.red.bold(`${line} ⚠️ SEUIL DÉPASSÉ (${MEMORY_WARN_MB}MB)`));
-  } else {
-    console.log(chalk.gray(line));
-  }
-}, 60 * 1000);
-
-init();
+// ---------------------- Hot-reload watcher ----------------------
+let file = require.resolve(__filename);
+fs.watchFile(file, () => {
+    fs.unwatchFile(file);
+    console.log(chalk.greenBright(`\n[UPDATE] '${__filename}' has been updated. Reloading...\n`));
+    delete require.cache[file];
+    require(file);
+});

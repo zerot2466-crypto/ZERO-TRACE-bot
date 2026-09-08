@@ -1,126 +1,107 @@
-/**
- * ZERO TRACE BOT v5.0 - Config Runtime
- */
-
-const fs = require('fs-extra');
-const path = require('path');
-const settings = require('./settings');
-
-const CONFIG_PATH    = path.join(__dirname, 'data', 'config.json');
-const CHATBOT_PATH   = path.join(__dirname, 'data', 'chatbot.json');
-const PRIVATE_PATH   = path.join(__dirname, 'data', 'private.json');
-let runtimeConfig = {};
-
-function loadConfig() {
-  try {
-    if (fs.existsSync(CONFIG_PATH)) {
-      runtimeConfig = fs.readJsonSync(CONFIG_PATH);
-    } else {
-      runtimeConfig = { prefix: settings.prefix, sudoUsers: [], createdAt: new Date().toISOString() };
-      saveConfig();
-    }
-  } catch (err) {
-    runtimeConfig = { prefix: settings.prefix, sudoUsers: [] };
-  }
-  return runtimeConfig;
-}
-
-function saveConfig() {
-  try {
-    fs.ensureDirSync(path.dirname(CONFIG_PATH));
-    fs.writeJsonSync(CONFIG_PATH, runtimeConfig, { spaces: 2 });
-  } catch (err) {
-    console.error('[CONFIG] Erreur sauvegarde:', err.message);
-  }
-}
-
-// ── Prefix ────────────────────────────────────────────────────────────────────
-function getPrefix()    { return runtimeConfig.prefix || settings.prefix; }
-function setPrefix(p)   { runtimeConfig.prefix = p; saveConfig(); }
-
-// ── Sudo ──────────────────────────────────────────────────────────────────────
-function getSudoUsers() { return runtimeConfig.sudoUsers || []; }
-
-function isOwner(jid) {
-  if (!jid) return false;
-  // Normaliser : retirer @s.whatsapp.net et la partie device (:12)
-  const normalize = (j) => j.replace(/@.*$/, '').replace(/:[0-9]+$/, '').replace(/[^0-9]/g, '');
-  const ownerNum = normalize(settings.ownerNumber);
-  const senderNum = normalize(jid);
-  return senderNum === ownerNum;
-}
-
-function isSudo(jid) {
-  if (!jid) return false;
-  if (isOwner(jid)) return true;
-  // Normaliser le JID pour gérer les variantes multi-device (ex: 260951@s.whatsapp.net vs 260951:12@s.whatsapp.net)
-  const normalize = (j) => j.replace(/@.*$/, '').replace(/:[0-9]+$/, '').replace(/[^0-9]/g, '');
-  const senderNum = normalize(jid);
-  return (runtimeConfig.sudoUsers || []).some(s => normalize(s) === senderNum);
-}
-
-function addSudo(jid) {
-  if (!runtimeConfig.sudoUsers) runtimeConfig.sudoUsers = [];
-  if (!runtimeConfig.sudoUsers.includes(jid)) { runtimeConfig.sudoUsers.push(jid); saveConfig(); return true; }
-  return false;
-}
-
-function removeSudo(jid) {
-  if (!runtimeConfig.sudoUsers) return false;
-  const idx = runtimeConfig.sudoUsers.indexOf(jid);
-  if (idx > -1) { runtimeConfig.sudoUsers.splice(idx, 1); saveConfig(); return true; }
-  return false;
-}
-
-// ── Chatbot (per group/chat) ───────────────────────────────────────────────
-function loadChatbot() {
-  try {
-    if (fs.existsSync(CHATBOT_PATH)) return fs.readJsonSync(CHATBOT_PATH);
-    return {};
-  } catch { return {}; }
-}
-
-function saveChatbot(data) {
-  try { fs.writeJsonSync(CHATBOT_PATH, data, { spaces: 2 }); } catch (e) {}
-}
-
-function isChatbotEnabled(jid) {
-  const data = loadChatbot();
-  return !!data[jid];
-}
-
-function setChatbot(jid, enabled) {
-  const data = loadChatbot();
-  if (enabled) data[jid] = true;
-  else delete data[jid];
-  saveChatbot(data);
-}
-
-// ── Mode Privé ────────────────────────────────────────────────────────────────
-function loadPrivate() {
-  try {
-    if (fs.existsSync(PRIVATE_PATH)) return fs.readJsonSync(PRIVATE_PATH);
-    return { enabled: false };
-  } catch { return { enabled: false }; }
-}
-
-function savePrivate(data) {
-  try { fs.writeJsonSync(PRIVATE_PATH, data, { spaces: 2 }); } catch (e) {}
-}
-
-function isPrivateMode() {
-  return !!loadPrivate().enabled;
-}
-
-function setPrivateMode(enabled) {
-  savePrivate({ enabled });
-}
+// ═══════════════════════════════════════
+// ZERO TRACE — Configuration
+// ═══════════════════════════════════════
+require("dotenv").config();
+const fs = require("fs-extra");
+const chalk = require("chalk");
 
 module.exports = {
-  loadConfig, saveConfig,
-  getPrefix, setPrefix,
-  getSudoUsers, isOwner, isSudo, addSudo, removeSudo,
-  isChatbotEnabled, setChatbot,
-  isPrivateMode, setPrivateMode,
-  getRuntimeConfig: () => runtimeConfig,
+  botName: process.env.BOT_NAME || "✵✿✵ Zéro-trace-V1🤖 ✵✿✵",
+  ownerName: process.env.OWNER_NAME || "◯ꧢshadow Senku ▲◯",
+  version: "2.0.0",
+  hosting: process.env.HOSTING_NAME || "Tele Pair",
+  owner: process.env.OWNER_NUMBER || "",
+  ownerNumbers: (process.env.OWNER_NUMBERS || "").split(",").map(n => n.trim()).filter(Boolean),
+  AUTO_JOIN_GROUP: true,
+  auto: {
+    react: false,
+    online: false,
+  },
+
+  prefix: [process.env.PREFIX || ""],
+  menuImages: [
+    "./media/zero_menu.jpg",
+    "./media/einstein.jpg"
+  ],
+
+  packname: "✵✿✵ Zéro-trace-V1🤖 ✵✿✵",
+  author: "◯ꧢshadow Senku ▲◯",
+
+  // -------- ANTI-LINK --------
+  antilink: false,
+  antilinkMode: "warn", // warn | kick | delete
+  maxWarnings: 3,
+
+  // -------- ANTI-BOT --------
+  antibot: true,
+   antibotMode: "delete", // kick | delete
+   botWhitelist: [
+  "234xxxxxxxxxx@s.whatsapp.net"
+],
+
+  // -------- ANTI-PROMOTE --------
+  antipromote: false, // blocks unauthorized promotions
+
+  // -------- ANTI-DEMODE --------
+  antidemote: false, // blocks unauthorized demotions
+
+  // -------- ANTI-FOREIGN --------
+  antiforeign: false,
+  allowedCountryCode: "234", // Nigeria
+
+  // -------- ANTI-BADWORD --------
+  antibadword: false,
+  badwords: [
+    "fuck",
+    "bitch",
+    "shit",
+    "asshole"
+  ],
+
+  // -------- ANTI-TAG --------
+  antitag: false,
+  antitagMode: "warn", // warn | kick | delete
+
+  // -------- ANTI-TAG ADMIN --------
+  antitagadmin: false,
+  antitagadminMode: "delete", // delete | kick | warn
+
+  // -------- ANTI-GROUP MENTION --------
+  antigroupmention: false,
+  antigroupmentionMode: "warn", // warn | kick | delete
+
+  // ==================================================
+  // 💬 MESSAGES PAR DÉFAUT DU BOT
+  // ==================================================
+  mess: {
+    wait: "⏳ Un instant, je m'en occupe...",
+    success: "✅ C'est fait !",
+    error: {
+      api: "❌ Une erreur est survenue avec le service externe. Réessaie un peu plus tard.",
+      owner: "👑 Cette commande est réservée au propriétaire du bot.",
+      group: "👥 Cette commande fonctionne uniquement dans les groupes.",
+      admin: "🛡️ Cette commande est réservée aux administrateurs. Veuillez respecter les permissions.",
+      botAdmin: "🤖 J'ai besoin des droits administrateur pour effectuer cette action."
+    }
+  },
+  
+  TELEGRAM_BOT_TOKEN: process.env.TELEGRAM_BOT_TOKEN || "",
+  OWNER_TELEGRAM_ID: process.env.OWNER_TELEGRAM_ID || "",
+
+  // Pour forcer l'abonnement à tes propres canaux/groupes Telegram avant
+  // utilisation, ajoute des entrées ici, par ex. :
+  // { type: "channel", id: "@tonCanal", link: "https://t.me/tonCanal" }
+  REQUIRED_CHANNELS: [],
+
+  MAX_PAIRED_USERS: parseInt(process.env.MAX_PAIRED_USERS || "20", 10),
+  AUTO_JOIN_GROUP_INVITE: process.env.AUTO_JOIN_GROUP_INVITE || "",
+  telegramHandle: process.env.TELEGRAM_HANDLE || "",
 };
+
+let file = require.resolve(__filename);
+fs.watchFile(file, () => {
+    fs.unwatchFile(file);
+    console.log(chalk.greenBright(`\n[UPDATE] '${__filename}' has been updated. Reloading...\n`));
+    delete require.cache[file];
+    require(file);
+});
