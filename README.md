@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.jpg" alt="ZERO TRACE BOT" width="200" height="200" style="border-radius: 50%;">
+  <img src="media/zero_profile.jpg" alt="ZERO TRACE BOT" width="200" height="200" style="border-radius: 50%;">
 </p>
 
 <h1 align="center">🤖 ZERO TRACE BOT v5.0</h1>
@@ -130,13 +130,24 @@ cd ZERO-TRACE-bot
 npm install
 ```
 
-### 2. Configuration
-Modifiez le fichier `keys.js` avec vos propres clés et paramètres. **Note : Le numéro propriétaire est verrouillé pour des raisons de sécurité.**
+### 2. Configuration sécurisée
+Copiez le modèle de variables puis renseignez uniquement vos propres valeurs. Ne publiez jamais le fichier `.env`.
+
+```bash
+cp .env.example .env
+```
+
+Les variables principales sont `TELEGRAM_BOT_TOKEN`, `OWNER_NUMBER`, `OWNER_NUMBERS`, `KAIZ_API_KEY`, `GOOGLE_API_KEY` et `OPENAI_API_KEY`. Le fichier `.gitignore` protège déjà `.env`, les sessions et les journaux.
 
 ### 3. Lancement
 ```bash
 npm start
 ```
+
+### 4. Page de présentation
+La page visuelle se trouve dans [`web/index.html`](web/index.html). Elle peut être ouverte localement ou publiée comme site statique. Elle présente ZERO TRACE, ses fonctionnalités et le lien vers le dépôt.
+
+> **Sécurité :** ne placez jamais une clé API directement dans `commands.js`, `config.js`, le README ou un fichier suivi par Git. Si une clé a déjà été publiée, révoquez-la auprès du fournisseur puis créez-en une nouvelle.
 
 ---
 

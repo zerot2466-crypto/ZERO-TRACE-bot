@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="ZERO TRACE V1 — Bot WhatsApp et Telegram puissant, sécurisé et personnalisable." />
+  <title>ZERO TRACE — Bot WhatsApp & Telegram</title>
+  <style>
+    :root { --bg:#060912; --panel:#0d1422; --panel2:#111b2c; --text:#eef6ff; --muted:#9cafc6; --blue:#16b8ff; --cyan:#62e8ff; --line:rgba(126,205,255,.18); }
+    * { box-sizing:border-box; }
+    html { scroll-behavior:smooth; }
+    body { margin:0; color:var(--text); background:radial-gradient(circle at 80% -10%,#12335a 0,transparent 35%),linear-gradient(180deg,#060912,#08101d 55%,#05070d); font-family:Inter,ui-sans-serif,system-ui,-apple-system,Segoe UI,sans-serif; }
+    a { color:inherit; text-decoration:none; }
+    .wrap { width:min(1120px,calc(100% - 40px)); margin:auto; }
+    nav { display:flex; align-items:center; justify-content:space-between; padding:24px 0; }
+    .brand { display:flex; align-items:center; gap:12px; font-weight:800; letter-spacing:.08em; }
+    .brand img { width:42px; height:42px; object-fit:cover; border-radius:14px; border:1px solid var(--line); }
+    .navlinks { display:flex; gap:24px; color:var(--muted); font-size:.95rem; }
+    .navlinks a:hover { color:var(--cyan); }
+    .hero { min-height:620px; display:grid; grid-template-columns:1.08fr .92fr; gap:50px; align-items:center; padding:62px 0 90px; }
+    .eyebrow { color:var(--cyan); font-size:.8rem; letter-spacing:.18em; text-transform:uppercase; font-weight:800; }
+    h1 { font-size:clamp(3rem,7vw,6.2rem); line-height:.95; margin:18px 0 24px; letter-spacing:-.07em; }
+    h1 span { color:var(--blue); text-shadow:0 0 28px rgba(22,184,255,.45); }
+    .lead { max-width:620px; color:var(--muted); font-size:1.15rem; line-height:1.75; }
+    .actions { display:flex; flex-wrap:wrap; gap:14px; margin-top:30px; }
+    .btn { padding:14px 20px; border-radius:12px; border:1px solid var(--line); font-weight:800; transition:.2s ease; }
+    .btn.primary { color:#00111c; background:linear-gradient(135deg,var(--cyan),var(--blue)); box-shadow:0 0 28px rgba(22,184,255,.25); }
+    .btn.secondary { background:rgba(255,255,255,.04); color:var(--text); }
+    .btn:hover { transform:translateY(-2px); filter:brightness(1.08); }
+    .visual { position:relative; display:grid; place-items:center; }
+    .orb { position:absolute; width:340px; height:340px; border-radius:50%; background:rgba(22,184,255,.18); filter:blur(54px); }
+    .hero-img { position:relative; width:min(420px,90%); aspect-ratio:1; object-fit:cover; border-radius:34px; border:1px solid rgba(98,232,255,.5); box-shadow:0 0 0 8px rgba(98,232,255,.04),0 30px 90px rgba(0,0,0,.55); transform:rotate(2deg); }
+    section { padding:86px 0; }
+    .section-head { display:flex; justify-content:space-between; gap:30px; align-items:end; margin-bottom:30px; }
+    h2 { font-size:clamp(2rem,4vw,3.4rem); margin:0; letter-spacing:-.05em; }
+    .section-head p { max-width:480px; color:var(--muted); line-height:1.7; }
+    .grid { display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+    .card { background:linear-gradient(180deg,rgba(17,27,44,.92),rgba(10,16,27,.92)); border:1px solid var(--line); border-radius:18px; padding:24px; min-height:180px; }
+    .card b { display:block; margin:12px 0 8px; font-size:1.15rem; }
+    .card p { color:var(--muted); line-height:1.6; margin:0; }
+    .icon { color:var(--cyan); font-size:1.7rem; }
+    .stats { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-top:20px; }
+    .stat { padding:22px; border:1px solid var(--line); border-radius:16px; background:rgba(255,255,255,.035); }
+    .stat strong { display:block; font-size:1.8rem; color:var(--cyan); }
+    .stat span { color:var(--muted); font-size:.9rem; }
+    .cta { text-align:center; border:1px solid var(--line); background:linear-gradient(135deg,rgba(22,184,255,.13),rgba(17,27,44,.7)); border-radius:24px; padding:58px 20px; }
+    footer { padding:28px 0 40px; color:var(--muted); border-top:1px solid var(--line); font-size:.9rem; }
+    @media (max-width:800px) { .hero { grid-template-columns:1fr; padding-top:35px; } .visual { order:-1; } .navlinks { display:none; } .grid { grid-template-columns:1fr; } .stats { grid-template-columns:repeat(2,1fr); } .section-head { display:block; } }
+  </style>
+</head>
+<body>
+  <header class="wrap">
+    <nav>
+      <a class="brand" href="#top"><img src="../media/zero_profile.jpg" alt="Logo ZERO TRACE" /><span>ZERO TRACE</span></a>
+      <div class="navlinks"><a href="#features">Fonctionnalités</a><a href="#stats">Aperçu</a><a href="#start">Installation</a></div>
+    </nav>
+  </header>
+  <main id="top">
+    <section class="wrap hero">
+      <div>
+        <div class="eyebrow">WhatsApp · Telegram · Automation</div>
+        <h1>Le bot qui laisse <span>zéro trace.</span></h1>
+        <p class="lead">Une base puissante pour gérer vos groupes, automatiser vos tâches, exploiter l’IA et personnaliser votre expérience de messagerie depuis une seule plateforme.</p>
+        <div class="actions"><a class="btn primary" href="#start">Commencer</a><a class="btn secondary" href="https://github.com/zerot2466-crypto/ZERO-TRACE-bot">Voir le dépôt</a></div>
+      </div>
+      <div class="visual"><div class="orb"></div><img class="hero-img" src="../media/zero_menu.jpg" alt="Interface visuelle ZERO TRACE" /></div>
+    </section>
+
+    <section id="features" class="wrap">
+      <div class="section-head"><h2>Conçu pour aller plus loin.</h2><p>Une architecture claire, des commandes nombreuses et une identité visuelle reconnaissable. Activez uniquement les fonctions dont votre communauté a besoin.</p></div>
+      <div class="grid">
+        <article class="card"><div class="icon">◈</div><b>Administration</b><p>Outils de modération, avertissements, protections anti-liens et gestion avancée des groupes.</p></article>
+        <article class="card"><div class="icon">✦</div><b>Intelligence artificielle</b><p>Commandes IA, analyse d’images, chatbot et génération de contenu via vos propres services.</p></article>
+        <article class="card"><div class="icon">◉</div><b>Multimédia</b><p>Recherche, téléchargement, stickers, audio et outils créatifs réunis dans une interface simple.</p></article>
+      </div>
+    </section>
+
+    <section id="stats" class="wrap">
+      <div class="section-head"><h2>Une base prête à évoluer.</h2><p>La V1 apporte une nouvelle structure et une présentation plus claire pour faciliter les prochaines versions.</p></div>
+      <div class="stats"><div class="stat"><strong>V1</strong><span>Version actuelle</span></div><div class="stat"><strong>24/7</strong><span>Automatisation continue</span></div><div class="stat"><strong>2</strong><span>Plateformes prises en charge</span></div><div class="stat"><strong>∞</strong><span>Possibilités de personnalisation</span></div></div>
+    </section>
+
+    <section id="start" class="wrap"><div class="cta"><h2>Prêt à lancer ZERO TRACE ?</h2><p class="lead" style="margin:16px auto 26px">Clonez le dépôt, installez les dépendances et renseignez vos variables dans `.env`.</p><a class="btn primary" href="https://github.com/zerot2466-crypto/ZERO-TRACE-bot#installation">Lire le guide d’installation</a></div></section>
+  </main>
+  <footer><div class="wrap">© 2026 ZERO TRACE · Utilisez le bot de manière responsable et respectez les règles des plateformes.</div></footer>
+</body>
+</html>
+参
+迭
+EOF
+# Remove accidental marker if present from editor transport
+sed -i '/^参$/d;/^迭$/d;/^EOF$/d' /home/ubuntu/zero_trace/web/index.html
+ls -lh /home/ubuntu/zero_trace/web/index.html
