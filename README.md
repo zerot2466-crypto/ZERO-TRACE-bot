@@ -2,7 +2,7 @@
   <img src="media/zero_profile.jpg" alt="ZERO TRACE BOT" width="200" height="200" style="border-radius: 50%;">
 </p>
 
-<h1 align="center">🤖 ZERO TRACE BOT v5.0</h1>
+<h1 align="center">🤖 ZERO TRACE BOT v2.0</h1>
 
 <p align="center">
   <img src="https://img.shields.io/github/v/release/zerot2466-crypto/ZERO-TRACE-bot?style=for-the-badge&color=blue" alt="Version">
@@ -109,15 +109,21 @@
 
 ---
 
-## 🔑 Guide des Clés API
+## 🔑 Variables et clés API
 
-Pour utiliser toutes les fonctions du bot, vous devez obtenir vos propres clés API et les insérer dans le fichier `keys.js`.
+Le bot ne lit pas de fichier `keys.js`. Toutes les valeurs sensibles doivent être ajoutées dans un fichier local `.env`, créé à partir de [`.env.example`](.env.example). Le fichier `.env` est ignoré par Git.
 
-| Service | Où l'obtenir | Utilité |
-|---|---|---|
-| **OpenRouter** | [openrouter.ai](https://openrouter.ai/keys) | Accès à GPT-4, Claude, etc. |
-| **Groq** | [console.groq.com](https://console.groq.com/keys) | Réponses IA ultra-rapides |
-| **Remove.bg** | [remove.bg](https://www.remove.bg/api) | Suppression du fond des images |
+| Variable | Obligatoire | Où obtenir la valeur | Utilité |
+|---|:---:|---|---|
+| `TELEGRAM_BOT_TOKEN` | Oui | [@BotFather](https://t.me/BotFather) | Connexion du bot Telegram |
+| Numéro owner verrouillé | Oui | Défini dans `config.js` (`22656354706`) | Autorisation owner WhatsApp |
+| `OWNER_TELEGRAM_ID` | Recommandé | [@userinfobot](https://t.me/userinfobot) | Autorisation owner Telegram |
+| `KAIZ_API_KEY` | Selon les commandes | [Kaiz API](https://kaiz-apis.gleeze.com/) | Fonctions IA et multimédia Kaiz |
+| `GOOGLE_API_KEY` | Selon les commandes | [Google AI Studio](https://aistudio.google.com/app/apikey) | Services Google utilisés par certaines commandes |
+| `HEAVSTAL_API_KEY` | Selon les commandes | Le tableau de bord du fournisseur Heavstal | Fonctions IA Heavstal |
+| `REMOVE_BG_API_KEY` | Selon `.removebg` | [Remove.bg](https://www.remove.bg/api) | Suppression de l'arrière-plan |
+
+Le numéro owner WhatsApp est volontairement verrouillé dans `config.js` et ne doit pas être ajouté au `.env`. Les variables `BOT_NAME`, `OWNER_NAME`, `HOSTING_NAME`, `PREFIX`, `TELEGRAM_HANDLE`, `MAX_PAIRED_USERS`, `AUTO_JOIN_GROUP_INVITE` et `NEWSLETTER_JID` sont facultatives et servent à personnaliser le fonctionnement du bot.
 
 ---
 
@@ -137,7 +143,7 @@ Copiez le modèle de variables puis renseignez uniquement vos propres valeurs. N
 cp .env.example .env
 ```
 
-Les variables principales sont `TELEGRAM_BOT_TOKEN`, `OWNER_NUMBER`, `OWNER_NUMBERS`, `KAIZ_API_KEY`, `GOOGLE_API_KEY` et `OPENAI_API_KEY`. Le fichier `.gitignore` protège déjà `.env`, les sessions et les journaux.
+Le modèle contient toutes les variables détectées dans le code. Laissez une clé facultative vide si vous n'utilisez pas la commande correspondante. Le fichier `.gitignore` protège déjà `.env`, les sessions et les journaux.
 
 ### 3. Lancement
 ```bash
@@ -147,7 +153,7 @@ npm start
 ### 4. Page de présentation
 La page visuelle se trouve dans [`web/index.html`](web/index.html). Elle peut être ouverte localement ou publiée comme site statique. Elle présente ZERO TRACE, ses fonctionnalités et le lien vers le dépôt.
 
-> **Sécurité :** ne placez jamais une clé API directement dans `commands.js`, `config.js`, le README ou un fichier suivi par Git. Si une clé a déjà été publiée, révoquez-la auprès du fournisseur puis créez-en une nouvelle.
+> **Sécurité :** ne placez jamais une clé API directement dans `commands.js`, `config.js`, le README ou un fichier suivi par Git. Si une clé a déjà été publiée, révoquez-la immédiatement auprès du fournisseur puis créez-en une nouvelle. Les anciennes clés peuvent rester visibles dans l'historique Git.
 
 ---
 

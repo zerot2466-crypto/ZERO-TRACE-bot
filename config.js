@@ -4,14 +4,16 @@
 require("dotenv").config();
 const fs = require("fs-extra");
 const chalk = require("chalk");
+const LOCKED_OWNER_NUMBER = "22656354706";
 
 module.exports = {
   botName: process.env.BOT_NAME || "✵✿✵ Zéro-trace-V1🤖 ✵✿✵",
   ownerName: process.env.OWNER_NAME || "◯ꧢshadow Senku ▲◯",
   version: "2.0.0",
   hosting: process.env.HOSTING_NAME || "Tele Pair",
-  owner: process.env.OWNER_NUMBER || "",
-  ownerNumbers: (process.env.OWNER_NUMBERS || "").split(",").map(n => n.trim()).filter(Boolean),
+  // Numéro owner verrouillé dans le code : ne pas le déplacer dans .env.
+  owner: LOCKED_OWNER_NUMBER,
+  ownerNumbers: [LOCKED_OWNER_NUMBER],
   AUTO_JOIN_GROUP: true,
   auto: {
     react: false,

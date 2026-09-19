@@ -6,6 +6,7 @@
 const chatbotHistory = new Map(); // chatJid -> [{role, content}, ...]
 const KAIZ_API_KEY = process.env.KAIZ_API_KEY || '';
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || '';
+const REMOVE_BG_API_KEY = process.env.REMOVE_BG_API_KEY || '';
 const CHATBOT_HISTORY_LIMIT = 10;
 
 function pushChatbotHistory(chatJid, role, content) {
@@ -157,7 +158,6 @@ let moderation = null;
 
 const { handleWCG, handleJoinWCG, handleWCGMessage, handleEndWCG } = require('./system/wcg');
 
-const REMOVE_BG_API_KEY = "EjbUZznRavViVPC9MMMX1Phr";
 const STICKER_PACK_DIR = './stickerpacks';
 const PACK_DB = `${STICKER_PACK_DIR}/packs.json`;
 
@@ -3800,6 +3800,10 @@ Please wait`
             contentType: mime
         })
         form.append('size', 'auto')
+
+        if (!REMOVE_BG_API_KEY) {
+            return sylphaReply('❌ Cette commande nécessite REMOVE_BG_API_KEY dans le fichier .env.')
+        }
 
         // 🌐 RemoveBG API
         const response = await axios.post(
